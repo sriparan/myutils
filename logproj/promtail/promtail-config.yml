@@ -17,8 +17,13 @@ scrape_configs:
   - targets:
       - localhost
     labels:
-      job: varlogs
-      __path__: /bugs/ddr/var/log/debug/sm/sms.info.*
+      job: smslogs
+      __path__: /bugs/ddr/var/log/debug/sm/sms.info*
+  - targets:
+      - localhost
+    labels:
+      job: ddshlogs
+      __path__: /bugs/ddr/var/log/debug/sm/ddsh.info*
   
 ## docker logs
 
