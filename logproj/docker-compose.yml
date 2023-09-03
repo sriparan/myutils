@@ -5,7 +5,7 @@ services:
   loki:
     image: grafana/loki:2.4.0
     volumes:
-      - /gitws/ddos/logproj/loki:/etc/loki
+      - /github/myutils/logproj/loki:/etc/loki
     ports:
       - "3100:3100"
     restart: unless-stopped
@@ -16,7 +16,7 @@ services:
     image: grafana/promtail:2.4.0
     volumes:
       - /github/bugs:/bugs
-      - /gitws/ddos/logproj/promtail:/etc/promtail
+      - /github/myutils/logproj/promtail:/etc/promtail
     # ports:
     #   - "1514:1514" # this is only needed if you are going to send syslogs
     restart: unless-stopped
@@ -27,7 +27,7 @@ services:
     image: grafana/grafana:latest
     user: "1013432"
     volumes:
-    - /gitws/ddos/logproj/grafana:/var/lib/grafana
+    - /github/myutils/logproj/grafana:/var/lib/grafana
     ports:
       - "3000:3000"
     restart: unless-stopped
