@@ -13,62 +13,62 @@ scrape_configs:
   # - job_name: test
     # pipeline_stages:
     # - regex:
-    #     # expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+(?P<optype>created|starting|completed)(.+?:\\s+)(?P<jobid>\\d+)(.+?:\\s+)(?P<jobname>[\\w]+)(?:(?:\\s+from\\s+host\\s+(?P<host>.+))|(?:\\s+by\\s+(?P<user>.+))|(?:,\\s+duration:\\s+(?P<dur>\\d+)\\s+msec,\\s+status:\\s(?P<endstatus>.+)))$"
-    #     expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+NOTICE:\\s+(?P<msgid>[\\-\\w\\d]+):.+command.+\"(?P<cmd>.+)\".*$"
+    #     # expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+(?P<optype>created|starting|completed)(.+?:\\s+)(?P<sms_jobid>\\d+)(.+?:\\s+)(?P<sms_jobname>[\\w]+)(?:(?:\\s+from\\s+host\\s+(?P<host>.+))|(?:\\s+by\\s+(?P<user>.+))|(?:,\\s+duration:\\s+(?P<dur>\\d+)\\s+msec,\\s+status:\\s(?P<endstatus>.+)))$"
+    #     expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+NOTICE:\\s+(?P<msgid>[\\-\\w\\d]+):.+command.+\"(?P<ddsh_cmd>.+)\".*$"
     # - labels:
     #     time:
     #     threadid:
     #     command:
     #     msgid:
-    #     cmd:
-    #     # jobname:
-    #     # jobid:
+    #     ddsh_cmd:
+    #     # sms_jobname:
+    #     # sms_jobid:
     #     # host:
     #     # user:
     #     # dur:
     #     # endstatus:
-  - job_name: local
+  - job_name: smslog_parser_jobs
     static_configs:
     - targets:
         - localhost
       labels:
-        job: smslogs
+        job: smsjobs
         __path__: /bugs/ddr/var/log/debug/sm/sms.info*
     pipeline_stages:
     - match:
-        selector: '{job="smslogs"}'
+        selector: '{job="smsjobs"}'
         stages:
         - regex:
-            expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+(?P<optype>created|starting|completed)(.+?:\\s+)(?P<jobid>\\d+)(.+?:\\s+)(?P<jobname>[\\w]+)(?:(?:\\s+from\\s+host\\s+(?P<host>.+))|(?:\\s+by\\s+(?P<user>.+))|(?:,\\s+duration:\\s+(?P<dur>\\d+)\\s+msec,\\s+status:\\s(?P<endstatus>.+)))$"
+            expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+(?P<optype>created|starting|completed)(.+?:\\s+)(?P<sms_jobid>\\d+)(.+?:\\s+)(?P<sms_jobname>[\\w]+)(?:(?:\\s+from\\s+host\\s+(?P<host>.+))|(?:\\s+by\\s+(?P<user>.+))|(?:,\\s+duration:\\s+(?P<dur>\\d+)\\s+msec,\\s+status:\\s(?P<endstatus>.+)))$"
         - labels:
             time:
             threadid:
             optype:
-            jobname:
-            jobid:
+            sms_jobname:
+            sms_jobid:
             host:
             user:
             dur:
             endstatus:
-  - job_name: local
+  - job_name: ddsh_parser_cmds
     static_configs:
     - targets:
         - localhost
       labels:
-        job: ddsh
+        job: ddshcommands
         __path__: /bugs/ddr/var/log/debug/sm/ddsh.info*
     pipeline_stages:
     - match:
-        selector: '{job="ddsh"}'
+        selector: '{job="ddshcommands"}'
         stages:
         - regex:
-            expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+NOTICE:\\s+(?P<msgid>[\\-\\w\\d]+):.+command.+\"(?P<cmd>.+)\".*$"
+            expression: "^\\s*(?P<time>\\d{2}\\/\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}.\\d+)\\s+\\[(?P<threadid>[0-9a-f]+)\\]\\s+NOTICE:\\s+(?P<msgid>[\\-\\w\\d]+):.+command.+\"(?P<ddsh_cmd>.+)\".*$"
         - labels:
             time:
             threadid:
             command:
             msgid:
-            cmd:
+            ddsh_cmd:
 
 ## docker logs
 
