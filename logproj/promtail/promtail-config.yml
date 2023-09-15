@@ -71,7 +71,6 @@ scrape_configs:
             ddsh_cmd:
 
 ## docker logs
-
 #- job_name: docker 
 #  pipeline_stages:
 #    - docker: {}
